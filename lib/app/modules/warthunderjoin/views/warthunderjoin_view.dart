@@ -109,7 +109,7 @@ class WarthunderjoinView extends GetView<WarthunderjoinController> {
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(30)),
                         color: Colors.transparent,
-                        child: FormviewView(),
+                        child: const FormviewView(),
                       ),
                     )
                   ],

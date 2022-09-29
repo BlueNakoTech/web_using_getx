@@ -30,7 +30,7 @@ class FormviewView extends GetView<FormController> {
               textCapitalization: TextCapitalization.words,
               keyboardType: TextInputType.name,
               decoration: InputDecoration(
-                label: Text("Nama Panggilan"),
+                label: const Text("Nama Panggilan"),
                 labelStyle: const TextStyle(color: Colors.white),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
@@ -42,7 +42,7 @@ class FormviewView extends GetView<FormController> {
             TextField(
               controller: controller.nickController,
               decoration: InputDecoration(
-                label: Text("WT nickname"),
+                label: const Text("WT nickname"),
                 labelStyle: const TextStyle(color: Colors.white),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
@@ -56,7 +56,7 @@ class FormviewView extends GetView<FormController> {
               textCapitalization: TextCapitalization.words,
               keyboardType: TextInputType.name,
               decoration: InputDecoration(
-                label: Text("Negara utama"),
+                label: const Text("Negara utama"),
                 labelStyle: const TextStyle(color: Colors.white),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
@@ -70,7 +70,7 @@ class FormviewView extends GetView<FormController> {
               textCapitalization: TextCapitalization.words,
               keyboardType: TextInputType.name,
               decoration: InputDecoration(
-                label: Text("Discord"),
+                label: const Text("Discord"),
                 hintText: 'Nicama#9958',
                 labelStyle: const TextStyle(color: Colors.white),
                 border: OutlineInputBorder(
