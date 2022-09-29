@@ -1,8 +1,5 @@
-import 'dart:ffi';
-import 'dart:html';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -11,8 +8,8 @@ class FormController extends GetxController {
   late TextEditingController nickController;
   late TextEditingController negaraController;
   late TextEditingController userController;
-  var isruleschecked;
-  var issbchecked;
+  final rulesChecked = false.obs;
+  final sbChecked = false.obs;
 
   FirebaseFirestore firestore = FirebaseFirestore.instance;
 
@@ -39,7 +36,13 @@ class FormController extends GetxController {
     negaraController = TextEditingController();
     userController = TextEditingController();
     super.onInit();
-    isruleschecked = bool;
-    issbchecked = bool;
+  }
+
+  void isChecked(
+    bool isRulesChecked,
+    bool isSbChecked,
+  ) {
+    rulesChecked(isRulesChecked);
+    sbChecked(isSbChecked);
   }
 }

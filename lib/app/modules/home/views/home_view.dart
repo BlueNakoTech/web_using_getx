@@ -108,7 +108,7 @@ class WarCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return  Container(
+    return Container(
       color: Colors.transparent,
       height: 300,
       width: 250,
@@ -175,8 +175,7 @@ class WowsCard extends StatelessWidget {
                   builder: (BuildContext context) => AlertDialog(
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(25)),
-                    actionsPadding: const 
-                    EdgeInsets.all(15),
+                    actionsPadding: const EdgeInsets.all(15),
                     title: const Text("Tidak ada Rekrutmen"),
                     content: const Text("ODIN sedang tidak membuka rekrutmen"),
                     actions: [
@@ -188,9 +187,6 @@ class WowsCard extends StatelessWidget {
                     ],
                   ),
                 );
-
-                
-                
               },
               child: const Text('World Of Warships')),
         ],
