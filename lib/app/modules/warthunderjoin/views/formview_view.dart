@@ -7,9 +7,6 @@ import '../controllers/form_controller.dart';
 class FormviewView extends GetView<FormController> {
   const FormviewView({Key? key}) : super(key: key);
   @override
-  
-
-  
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
@@ -91,7 +88,12 @@ class FormviewView extends GetView<FormController> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  Checkbox(value: false, onChanged: (value) {}),
+                  Obx(() => Checkbox(
+                        value: controller.sbChecked.value,
+                        onChanged: (value) {
+                          controller.sbChecked(value);
+                        },
+                      )),
                   const Expanded(
                       child: Text(
                     'Saya Siap Mengikuti Squadron Realistic Battle',
@@ -108,11 +110,13 @@ class FormviewView extends GetView<FormController> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  Checkbox(
-                    value: controller.isruleschecked,
-                    onChanged: (bool? value) {
-                      
-                    },
+                  Obx(
+                    () => Checkbox(
+                      value: controller.rulesChecked.value,
+                      onChanged: (value) {
+                        controller.rulesChecked(value);
+                      },
+                    ),
                   ),
                   const Expanded(
                       child: Text(
@@ -125,18 +129,25 @@ class FormviewView extends GetView<FormController> {
                 ],
               ),
             ),
-            ElevatedButton(
+            Obx(() => ElevatedButton(
                 style: ElevatedButton.styleFrom(
                     fixedSize: const Size(260, 50),
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20))),
-                onPressed: () => controller.addFormulir(
-                      controller.namaController.text,
-                      controller.nickController.text,
-                      controller.negaraController.text,
-                      controller.userController.text,
-                    ),
-                child: const Text('Kirim')),
+                onPressed:
+                    controller.rulesChecked.value && controller.sbChecked.value
+                        ? () {
+                            controller.addFormulir(
+                              controller.namaController.text,
+                              controller.nickController.text,
+                              controller.negaraController.text,
+                              controller.userController.text,
+                            );
+                            
+
+                          }
+                        : null,
+                child: const Text('Kirim'))),
           ],
         ),
       ),
