@@ -84,7 +84,7 @@ class WarthunderjoinView extends GetView<WarthunderjoinController> {
                                         color: Colors.white, fontSize: 28),
                                   ),
                                   Text(
-                                    'Harap dibaca semua (tolong di scroll ke atas)',
+                                    'Harap dibaca semua (tolong di scroll ke bawah)',
                                     style: TextStyle(
                                         color: Colors.black, fontSize: 10),
                                   ),

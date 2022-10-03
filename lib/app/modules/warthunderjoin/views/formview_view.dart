@@ -1,3 +1,5 @@
+import 'dart:html';
+
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
@@ -9,9 +11,9 @@ class FormviewView extends GetView<FormController> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+      padding: const EdgeInsets.fromLTRB(50, 10, 50, 10),
       child: SizedBox(
-        width: 260,
+        width: 200,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
@@ -134,19 +136,48 @@ class FormviewView extends GetView<FormController> {
                     fixedSize: const Size(260, 50),
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20))),
-                onPressed:
-                    controller.rulesChecked.value && controller.sbChecked.value
-                        ? () {
-                            controller.addFormulir(
-                              controller.namaController.text,
-                              controller.nickController.text,
-                              controller.negaraController.text,
-                              controller.userController.text,
-                            );
-                            
+                onPressed: controller.rulesChecked.value &&
+                        controller.sbChecked.value
+                    ? () {
+                        controller.addFormulir(
+                          controller.namaController.text,
+                          controller.nickController.text,
+                          controller.negaraController.text,
+                          controller.userController.text,
+                        );
+                        Get.defaultDialog(
+                          title: '',
+                          backgroundColor: Colors.transparent,
+                          barrierDismissible: false,
+                          middleText:
+                              "Untuk Proses lebih lanjut bisa langsung join Discord server kami",
+                          content: AlertDialog(
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(25)),
+                            actionsPadding: const EdgeInsets.all(30),
+                            title: const Text("Formulir Terkirim"),
+                            content: const Text(
+                                "Untuk Proses lebih lanjut bisa langsung join Discord server kami"),
+                            actions: [
+                              TextButton(
+                                  onPressed: (() {
+                                    controller.formSend(false, false);
 
-                          }
-                        : null,
+                                    Get.back();
+                                  }),
+                                  child: const Text("OK")),
+                              IconButton(
+                                // ignore: prefer_const_constructors
+                                icon: Icon(
+                                  Icons.discord,
+                                ),
+                                onPressed: () => controller.discordUrl()
+                              )
+                            ],
+                          ),
+                        );
+                      }
+                    : null,
                 child: const Text('Kirim'))),
           ],
         ),
