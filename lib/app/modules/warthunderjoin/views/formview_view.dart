@@ -1,4 +1,4 @@
-import 'dart:html';
+
 
 import 'package:flutter/material.dart';
 
@@ -163,7 +163,17 @@ class FormviewView extends GetView<FormController> {
                                   onPressed: (() {
                                     controller.formSend(false, false);
 
-                                    Get.back();
+                                    Get.defaultDialog(
+                                      title: 'Join Server DISCORD kami untuk mempercepat proses ACC',
+                                      middleText: 'Tidak akan kami ACC jika tidak join Server DISCORD',
+                                      textConfirm: 'OK',
+                                      barrierDismissible: false,
+                                      onConfirm: () {
+                                        controller.discordUrl();
+                                       Get.toNamed('/home');
+                                      },
+
+                                    );
                                   }),
                                   child: const Text("OK")),
                               IconButton(
@@ -171,7 +181,13 @@ class FormviewView extends GetView<FormController> {
                                 icon: Icon(
                                   Icons.discord,
                                 ),
-                                onPressed: () => controller.discordUrl()
+                                onPressed: () { 
+                                  controller.discordUrl();
+                                  controller.formSend(false, false);
+                                  Get.toNamed('/home');
+                                  
+
+                                  }
                               )
                             ],
                           ),

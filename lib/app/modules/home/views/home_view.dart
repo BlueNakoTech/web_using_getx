@@ -156,13 +156,13 @@ class WowsCard extends StatelessWidget {
           const Material(
             color: Colors.transparent,
             child: Text(
-              '[ODIN]',
+              '[TopGradeGunner]',
               style: TextStyle(color: Colors.white),
             ),
           ),
           const CircleAvatar(
             radius: 70,
-            backgroundImage: AssetImage("assets/images/LOGO_ODIN_PNG.png"),
+            backgroundImage: AssetImage("assets/images/ShirokoLogo.png")
           ),
           ElevatedButton(
               style: ElevatedButton.styleFrom(
@@ -188,7 +188,7 @@ class WowsCard extends StatelessWidget {
                   ),
                 );
               },
-              child: const Text('World Of Warships')),
+              child: const Text('Blue Archive')),
         ],
       ),
     );

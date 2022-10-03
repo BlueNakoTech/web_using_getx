@@ -5,7 +5,7 @@ class RulesController extends GetxController {
 
   FirebaseFirestore firestore = FirebaseFirestore.instance;  
 
-  Future<QuerySnapshot<Object?>>getData() async {
+  Future<QuerySnapshot<Object?>>getData()  {
 
     CollectionReference rules = firestore.collection('Rules');
 
