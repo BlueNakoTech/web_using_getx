@@ -1,5 +1,3 @@
-
-
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
@@ -11,11 +9,12 @@ class FormviewView extends GetView<FormController> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(50, 10, 50, 10),
+      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
       child: SizedBox(
         width: 200,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Center(
               child: Text(
@@ -54,20 +53,6 @@ class FormviewView extends GetView<FormController> {
               textAlignVertical: TextAlignVertical.bottom,
             ),
             TextField(
-              controller: controller.negaraController,
-              textCapitalization: TextCapitalization.words,
-              keyboardType: TextInputType.name,
-              decoration: InputDecoration(
-                label: const Text("Negara utama"),
-                labelStyle: const TextStyle(color: Colors.white),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-              ),
-              style: const TextStyle(fontSize: 12, color: Colors.white),
-              textAlignVertical: TextAlignVertical.bottom,
-            ),
-            TextField(
               controller: controller.userController,
               textCapitalization: TextCapitalization.words,
               keyboardType: TextInputType.name,
@@ -82,8 +67,22 @@ class FormviewView extends GetView<FormController> {
               style: const TextStyle(fontSize: 12, color: Colors.white),
               textAlignVertical: TextAlignVertical.bottom,
             ),
+            TextField(
+              controller: controller.negaraController,
+              textCapitalization: TextCapitalization.words,
+              keyboardType: TextInputType.name,
+              decoration: InputDecoration(
+                label: const Text("Negara utama"),
+                labelStyle: const TextStyle(color: Colors.white),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+              style: const TextStyle(fontSize: 12, color: Colors.white),
+              textAlignVertical: TextAlignVertical.bottom,
+            ),
             const SizedBox(
-              height: 40,
+              height: 20,
             ),
             Container(
               constraints: const BoxConstraints(maxWidth: 334),
@@ -101,14 +100,10 @@ class FormviewView extends GetView<FormController> {
                     'Saya Siap Mengikuti Squadron Realistic Battle',
                     style: TextStyle(fontSize: 11, color: Colors.white),
                   )),
-                  const SizedBox(
-                    width: 20,
-                  ),
                 ],
               ),
             ),
             Container(
-              constraints: const BoxConstraints(maxWidth: 334),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
@@ -131,70 +126,71 @@ class FormviewView extends GetView<FormController> {
                 ],
               ),
             ),
-            Obx(() => ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                    fixedSize: const Size(260, 50),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20))),
-                onPressed: controller.rulesChecked.value &&
-                        controller.sbChecked.value
-                    ? () {
-                        controller.addFormulir(
-                          controller.namaController.text,
-                          controller.nickController.text,
-                          controller.negaraController.text,
-                          controller.userController.text,
-                        );
-                        Get.defaultDialog(
-                          title: '',
-                          backgroundColor: Colors.transparent,
-                          barrierDismissible: false,
-                          middleText:
-                              "Untuk Proses lebih lanjut bisa langsung join Discord server kami",
-                          content: AlertDialog(
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(25)),
-                            actionsPadding: const EdgeInsets.all(30),
-                            title: const Text("Formulir Terkirim"),
-                            content: const Text(
-                                "Untuk Proses lebih lanjut bisa langsung join Discord server kami"),
-                            actions: [
-                              TextButton(
-                                  onPressed: (() {
-                                    controller.formSend(false, false);
+            Obx(() => Container(
+                  width: Get.width,
+                  height: 40,
+                  child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20))),
+                      onPressed: controller.rulesChecked.value &&
+                              controller.sbChecked.value
+                          ? () {
+                              controller.addFormulir(
+                                controller.namaController.text,
+                                controller.nickController.text,
+                                controller.negaraController.text,
+                                controller.userController.text,
+                              );
+                              Get.defaultDialog(
+                                title: '',
+                                backgroundColor: Colors.transparent,
+                                barrierDismissible: false,
+                                middleText:
+                                    "Untuk Proses lebih lanjut bisa langsung join Discord server kami",
+                                content: AlertDialog(
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(25)),
+                                  actionsPadding: const EdgeInsets.all(30),
+                                  title: const Text("Formulir Terkirim"),
+                                  content: const Text(
+                                      "Untuk Proses lebih lanjut bisa langsung join Discord server kami"),
+                                  actions: [
+                                    TextButton(
+                                        onPressed: (() {
+                                          controller.formSend(false, false);
 
-                                    Get.defaultDialog(
-                                      title: 'Join Server DISCORD kami untuk mempercepat proses ACC',
-                                      middleText: 'Tidak akan kami ACC jika tidak join Server DISCORD',
-                                      textConfirm: 'OK',
-                                      barrierDismissible: false,
-                                      onConfirm: () {
-                                        controller.discordUrl();
-                                       Get.toNamed('/home');
-                                      },
-
-                                    );
-                                  }),
-                                  child: const Text("OK")),
-                              IconButton(
-                                // ignore: prefer_const_constructors
-                                icon: Icon(
-                                  Icons.discord,
+                                          Get.defaultDialog(
+                                            title:
+                                                'Join Server DISCORD kami untuk mempercepat proses ACC',
+                                            middleText:
+                                                'Tidak akan kami ACC jika tidak join Server DISCORD',
+                                            textConfirm: 'OK',
+                                            barrierDismissible: false,
+                                            onConfirm: () {
+                                              controller.discordUrl();
+                                              Get.toNamed('/home');
+                                            },
+                                          );
+                                        }),
+                                        child: const Text("OK")),
+                                    IconButton(
+                                        // ignore: prefer_const_constructors
+                                        icon: Icon(
+                                          Icons.discord,
+                                        ),
+                                        onPressed: () {
+                                          controller.discordUrl();
+                                          controller.formSend(false, false);
+                                          Get.toNamed('/home');
+                                        })
+                                  ],
                                 ),
-                                onPressed: () { 
-                                  controller.discordUrl();
-                                  controller.formSend(false, false);
-                                  Get.toNamed('/home');
-                                  
-
-                                  }
-                              )
-                            ],
-                          ),
-                        );
-                      }
-                    : null,
-                child: const Text('Kirim'))),
+                              );
+                            }
+                          : null,
+                      child: const Text('Kirim')),
+                )),
           ],
         ),
       ),

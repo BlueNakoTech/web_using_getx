@@ -1,5 +1,6 @@
 import 'package:app_using_getx/app/modules/warthunderjoin/views/card_view.dart';
 import 'package:app_using_getx/app/modules/warthunderjoin/views/rules_view.dart';
+import 'package:app_using_getx/theme/colors.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
@@ -64,16 +65,18 @@ class WarthunderjoinView extends GetView<WarthunderjoinController> {
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(30)),
                                 color: Colors.transparent,
-                                child: const CardView(),
+                                child: CardView(),
                               )),
                         ),
                         Expanded(
                           flex: 1,
                           child: Card(
                             shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(30)),
+                                borderRadius: BorderRadius.circular(20)),
                             color: Colors.transparent,
-                            child: Center(
+                            child: Container(
+                              width: Get.width,
+                              padding: EdgeInsets.symmetric(horizontal: 6),
                               child: Column(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceEvenly,
@@ -84,9 +87,10 @@ class WarthunderjoinView extends GetView<WarthunderjoinController> {
                                         color: Colors.white, fontSize: 28),
                                   ),
                                   Text(
-                                    'Harap dibaca semua (tolong di scroll ke bawah)',
+                                    'Mohon untuk dibaca menyeluruh !',
                                     style: TextStyle(
-                                        color: Colors.black, fontSize: 10),
+                                        color: Colors.white, fontSize: 10),
+                                    textAlign: TextAlign.center,
                                   ),
                                 ],
                               ),
@@ -97,7 +101,7 @@ class WarthunderjoinView extends GetView<WarthunderjoinController> {
                             flex: 3,
                             child: Card(
                               shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(30)),
+                                  borderRadius: BorderRadius.circular(15)),
                               color: Colors.transparent,
                               child: const RulesView(),
                             )),

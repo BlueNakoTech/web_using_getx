@@ -12,7 +12,7 @@ class FormController extends GetxController {
   final rulesChecked = false.obs;
   final sbChecked = false.obs;
   late Uri url;
-  final invite = 'https://discord.gg/8Vq6sBGQVH'.obs;
+  final invite = 'https://discord.gg/9JxKgc2kgr'.obs;
 
   FirebaseFirestore firestore = FirebaseFirestore.instance;
 

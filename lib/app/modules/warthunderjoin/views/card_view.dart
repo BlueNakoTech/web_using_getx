@@ -1,3 +1,4 @@
+import 'package:app_using_getx/app/modules/warthunderjoin/controllers/warthunderjoin_controller.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
@@ -6,6 +7,7 @@ class CardView extends GetView {
   const CardView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
+    final controller = Get.put(WarthunderjoinController());
     return FittedBox(
       child: Container(
         color: Colors.transparent,

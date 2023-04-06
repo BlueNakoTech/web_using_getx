@@ -16,14 +16,14 @@ class AppPages {
 
   static final routes = [
     GetPage(
-      name: _Paths.HOME,
-      page: () => const HomeView(),
-      binding: HomeBinding(),
-    ),
+        name: _Paths.HOME,
+        page: () => const HomeViewAdaptiveLayout(),
+        binding: HomeBinding(),
+        transitionDuration: const Duration(microseconds: 1000)),
     GetPage(
-      name: _Paths.WARTHUNDERJOIN,
-      page: () => const WarthunderjoinView(),
-      binding: WarthunderjoinBinding(),
-    ),
+        name: _Paths.WARTHUNDERJOIN,
+        page: () => const WarthunderjoinView(),
+        binding: WarthunderjoinBinding(),
+        transitionDuration: const Duration(microseconds: 1000)),
   ];
 }
