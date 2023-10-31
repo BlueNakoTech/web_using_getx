@@ -18,7 +18,7 @@ class CardView extends GetView {
           children: [
             const CircleAvatar(
               radius: 65,
-              backgroundImage: AssetImage("assets/images/Logo_tKRI.png"),
+              backgroundImage: AssetImage("assets/images/Logo_QED.png"),
             ),
             Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -26,7 +26,7 @@ class CardView extends GetView {
                 const Material(
                   color: Colors.transparent,
                   child: Text(
-                    '[TKRI]',
+                    'Q.E.D',
                     style: TextStyle(fontSize: 30, color: Colors.white),
                   ),
                 ),

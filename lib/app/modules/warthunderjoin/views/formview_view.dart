@@ -57,8 +57,8 @@ class FormviewView extends GetView<FormController> {
               textCapitalization: TextCapitalization.words,
               keyboardType: TextInputType.name,
               decoration: InputDecoration(
-                label: const Text("Discord"),
-                hintText: 'Nicama#9958',
+                label: const Text("Discord Username"),
+                hintText: 'frostnii',
                 labelStyle: const TextStyle(color: Colors.white),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
@@ -139,8 +139,8 @@ class FormviewView extends GetView<FormController> {
                               controller.addFormulir(
                                 controller.namaController.text,
                                 controller.nickController.text,
-                                controller.negaraController.text,
-                                controller.userController.text,
+                                controller.negaraController.text.toUpperCase(),
+                                controller.userController.text.toLowerCase(),
                               );
                               Get.defaultDialog(
                                 title: '',
@@ -159,31 +159,19 @@ class FormviewView extends GetView<FormController> {
                                     TextButton(
                                         onPressed: (() {
                                           controller.formSend(false, false);
-
-                                          Get.defaultDialog(
-                                            title:
-                                                'Join Server DISCORD kami untuk mempercepat proses ACC',
-                                            middleText:
-                                                'Tidak akan kami ACC jika tidak join Server DISCORD',
-                                            textConfirm: 'OK',
-                                            barrierDismissible: false,
-                                            onConfirm: () {
-                                              controller.discordUrl();
-                                              Get.toNamed('/home');
-                                            },
-                                          );
+                                          Get.toNamed('/home');
                                         }),
                                         child: const Text("OK")),
-                                    IconButton(
-                                        // ignore: prefer_const_constructors
-                                        icon: Icon(
-                                          Icons.discord,
-                                        ),
-                                        onPressed: () {
-                                          controller.discordUrl();
-                                          controller.formSend(false, false);
-                                          Get.toNamed('/home');
-                                        })
+                                    // IconButton(
+                                    //     // ignore: prefer_const_constructors
+                                    //     icon: Icon(
+                                    //       Icons.discord,
+                                    //     ),
+                                    //     onPressed: () {
+                                    //       controller.discordUrl();
+                                    //       controller.formSend(false, false);
+
+                                    //     })
                                   ],
                                 ),
                               );

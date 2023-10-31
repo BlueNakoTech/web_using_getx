@@ -106,9 +106,9 @@ class WarCardMobile extends StatelessWidget {
   Widget build(BuildContext context) {
     return CardMobile(
       color: cardColor,
-      title: "[TKRI]",
+      title: "[Q.E.D]",
       buttonText: "War Thunder",
-      assetImage: "assets/images/Logo_tKRI.png",
+      assetImage: "assets/images/Logo_QED.png",
       onPressed: () {
         Get.toNamed('/warthunderjoin');
       },
@@ -123,9 +123,9 @@ class WarCardDesktop extends StatelessWidget {
   Widget build(BuildContext context) {
     return CardDesktop(
       color: cardColor,
-      title: "[TKRI]",
+      title: "[Q.E.D]",
       buttonText: "War Thunder",
-      assetImage: "assets/images/Logo_tKRI.png",
+      assetImage: "assets/images/Logo_QED.png",
       onPressed: () {
         Get.toNamed('/warthunderjoin');
       },
