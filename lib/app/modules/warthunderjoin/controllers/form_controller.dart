@@ -13,6 +13,7 @@ class FormController extends GetxController {
   final sbChecked = false.obs;
   late Uri url;
   final invite = 'https://discord.gg/9JxKgc2kgr'.obs;
+  final isButtonEnabled = false.obs;
 
   FirebaseFirestore firestore = FirebaseFirestore.instance;
 
@@ -70,5 +71,34 @@ class FormController extends GetxController {
     } else {
       throw 'Could not launch $url';
     }
+  }
+
+  bool validateFields() {
+    bool isAllFieldsValid = true;
+
+    // Validate first field
+    if (namaController.text.trim().isEmpty) {
+      isAllFieldsValid = false;
+    }
+
+    // Validate second field
+    if (negaraController.text.trim().isEmpty) {
+      isAllFieldsValid = false;
+    }
+
+    // Validate third field
+    if (nickController.text.trim().isEmpty) {
+      isAllFieldsValid = false;
+    }
+
+    // Validate fourth field
+    if (userController.text.trim().isEmpty) {
+      isAllFieldsValid = false;
+    }
+
+    // Update button state
+    isButtonEnabled.value = isAllFieldsValid;
+
+    return isAllFieldsValid;
   }
 }

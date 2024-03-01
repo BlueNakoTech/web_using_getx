@@ -25,9 +25,9 @@ class FormviewView extends GetView<FormController> {
             const SizedBox(
               height: 20,
             ),
-            TextField(
+            TextFormField(
               controller: controller.namaController,
-              onEditingComplete: () {},
+              onChanged: (_) => controller.validateFields(),
               textCapitalization: TextCapitalization.words,
               keyboardType: TextInputType.name,
               decoration: InputDecoration(
@@ -40,8 +40,9 @@ class FormviewView extends GetView<FormController> {
               style: const TextStyle(fontSize: 12, color: Colors.white),
               textAlignVertical: TextAlignVertical.bottom,
             ),
-            TextField(
+            TextFormField(
               controller: controller.nickController,
+              onChanged: (_) => controller.validateFields(),
               decoration: InputDecoration(
                 label: const Text("WT nickname"),
                 labelStyle: const TextStyle(color: Colors.white),
@@ -52,9 +53,10 @@ class FormviewView extends GetView<FormController> {
               style: const TextStyle(fontSize: 12, color: Colors.white),
               textAlignVertical: TextAlignVertical.bottom,
             ),
-            TextField(
+            TextFormField(
               controller: controller.userController,
               textCapitalization: TextCapitalization.words,
+              onChanged: (_) => controller.validateFields(),
               keyboardType: TextInputType.name,
               decoration: InputDecoration(
                 label: const Text("Discord Username"),
@@ -67,9 +69,10 @@ class FormviewView extends GetView<FormController> {
               style: const TextStyle(fontSize: 12, color: Colors.white),
               textAlignVertical: TextAlignVertical.bottom,
             ),
-            TextField(
+            TextFormField(
               controller: controller.negaraController,
               textCapitalization: TextCapitalization.words,
+              onChanged: (_) => controller.validateFields(),
               keyboardType: TextInputType.name,
               decoration: InputDecoration(
                 label: const Text("Negara utama"),
@@ -134,7 +137,8 @@ class FormviewView extends GetView<FormController> {
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(20))),
                       onPressed: controller.rulesChecked.value &&
-                              controller.sbChecked.value
+                              controller.sbChecked.value &&
+                              controller.isButtonEnabled.value
                           ? () {
                               controller.addFormulir(
                                 controller.namaController.text,

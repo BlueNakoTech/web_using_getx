@@ -133,3 +133,33 @@ class CardDesktop extends StatelessWidget {
     );
   }
 }
+
+class UniversalButton extends StatelessWidget {
+  const UniversalButton(
+      {Key? key,
+      void Function()? onPressed,
+      required Color color,
+      required String buttonText})
+      : _onPressed = onPressed,
+        // _title = title,
+        _buttonText = buttonText,
+        super(key: key);
+
+  final Function()? _onPressed;
+  final Color color = const Color(0xFF1D49A1);
+  // final String _title;
+  final String _buttonText;
+
+  @override
+  Widget build(BuildContext context) {
+    return Flexible(
+      child: ElevatedButton(
+          style: ElevatedButton.styleFrom(
+              fixedSize: const Size(150, 40),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20))),
+          onPressed: _onPressed,
+          child: Text(_buttonText)),
+    );
+  }
+}
