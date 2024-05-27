@@ -1,3 +1,5 @@
+import 'package:app_using_getx/app/modules/hsr/bindings/hsr_binding.dart';
+import 'package:app_using_getx/app/modules/hsr/views/hsr_view.dart';
 import 'package:get/get.dart';
 
 import '../modules/home/bindings/home_binding.dart';
@@ -24,6 +26,11 @@ class AppPages {
         name: _Paths.WARTHUNDERJOIN,
         page: () => const WarthunderjoinView(),
         binding: WarthunderjoinBinding(),
+        transitionDuration: const Duration(microseconds: 1000)),
+    GetPage(
+        name: _Paths.HSR,
+        page: () => const HsrView(),
+        binding: HsrBinding(),
         transitionDuration: const Duration(microseconds: 1000)),
   ];
 }

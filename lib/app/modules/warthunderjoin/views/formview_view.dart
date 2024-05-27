@@ -75,7 +75,8 @@ class FormviewView extends GetView<FormController> {
               onChanged: (_) => controller.validateFields(),
               keyboardType: TextInputType.name,
               decoration: InputDecoration(
-                label: const Text("Negara utama"),
+                label: const Text("Tech Tree / BR"),
+                hintText: 'Italy 11.7, Germany 11.0. dst',
                 labelStyle: const TextStyle(color: Colors.white),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
