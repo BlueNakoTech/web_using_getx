@@ -9,10 +9,15 @@ class HsrView extends GetView<HsrController> {
   const HsrView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
       body: Stack(children: [
-        BackgroundImageWidget(),
-        SizedBox(width: 800, height: double.infinity, child: BannerListWidget())
+        const BackgroundImageWidget(),
+        Container(
+            width: double.infinity,
+            height: double.infinity,
+            alignment: Alignment.center,
+            child: SizedBox(
+                width: 800, height: double.infinity, child: BannerListWidget()))
       ]),
     );
   }
