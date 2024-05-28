@@ -196,81 +196,84 @@ class BannerCard extends StatelessWidget {
       color: Colors.transparent.withOpacity(0.5),
       margin: const EdgeInsets.all(10),
       elevation: 5,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              name,
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
+      child: Container(
+        padding: EdgeInsets.all(10),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                name,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(2.0),
-            child: Text(
-              "JP VA : $va",
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 12,
+            Padding(
+              padding: const EdgeInsets.all(2.0),
+              child: Text(
+                "JP VA : $va",
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 12,
+                ),
               ),
             ),
-          ),
-          Row(
-            children: [
-              Expanded(
-                flex: 2,
-                child: SizedBox(
-                  child: Image.network(
-                    imageUrl,
-                    fit: BoxFit.contain,
+            Row(
+              children: [
+                Expanded(
+                  flex: 2,
+                  child: SizedBox(
+                    child: Image.network(
+                      imageUrl,
+                      fit: BoxFit.contain,
+                    ),
                   ),
                 ),
-              ),
-              Expanded(
-                flex: 1,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: checkboxValues.keys.map((key) {
-                    return Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Text(
-                          displayTexts[key]!,
-                          style: const TextStyle(color: Colors.white),
-                        ),
-                        Theme(
-                          data: ThemeData(
-                            unselectedWidgetColor: Colors
-                                .white, // Color of the checkbox when it is not selected
+                Expanded(
+                  flex: 1,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: checkboxValues.keys.map((key) {
+                      return Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Text(
+                            displayTexts[key]!,
+                            style: const TextStyle(color: Colors.white),
                           ),
-                          child: Checkbox(
-                            value: checkboxValues[key],
-                            onChanged: (bool? value) {
-                              if (value != null) {
-                                controller.updateCheckboxValue(
-                                    bannerId, key, value);
-                              }
-                            },
-                            activeColor: Colors.grey, // Color of the checkbox
-                            checkColor: Colors.yellowAccent,
-                            // Color of the check mark
+                          Theme(
+                            data: ThemeData(
+                              unselectedWidgetColor: Colors
+                                  .white, // Color of the checkbox when it is not selected
+                            ),
+                            child: Checkbox(
+                              value: checkboxValues[key],
+                              onChanged: (bool? value) {
+                                if (value != null) {
+                                  controller.updateCheckboxValue(
+                                      bannerId, key, value);
+                                }
+                              },
+                              activeColor: Colors.grey, // Color of the checkbox
+                              checkColor: Colors.yellowAccent,
+                              // Color of the check mark
+                            ),
                           ),
-                        ),
-                      ],
-                    );
-                  }).toList(),
+                        ],
+                      );
+                    }).toList(),
+                  ),
                 ),
-              ),
-            ],
-          ),
-          PullStrategyBox(pullStrategy: pullStrategy)
-        ],
+              ],
+            ),
+            PullStrategyBox(pullStrategy: pullStrategy)
+          ],
+        ),
       ),
     );
   }

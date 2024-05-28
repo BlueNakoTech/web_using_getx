@@ -10,6 +10,11 @@ class HsrView extends GetView<HsrController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        leading: Image.asset("assets/images/Honkai_Star_Rail.webp"),
+        backgroundColor: Colors.black45,
+        title: Text("Character Gacha"),
+      ),
       body: Stack(children: [
         const BackgroundImageWidget(),
         Container(
@@ -58,34 +63,32 @@ class BannerListWidget extends StatelessWidget {
         }
 
         var banners = snapshot.data!.docs;
-        return SingleChildScrollView(
-          child: ListView.builder(
-            shrinkWrap: true,
-            itemCount: banners.length,
-            itemBuilder: (context, index) {
-              var banner = banners[index];
-              return BannerCard(
-                bannerId: banner.id,
-                name: banner['name'],
-                imageUrl: banner['url'],
-                va: banner['va'],
-                checkboxValues: {
-                  'v1': banner['v1'] ?? false,
-                  'v2': banner['v2'] ?? false,
-                  'v3': banner['v3'] ?? false,
-                  'v4': banner['v4'] ?? false,
-                  'v5': banner['v5'] ?? false,
-                },
-                displayTexts: {
-                  'v1': 'Cute AF',
-                  'v2': 'Small Size',
-                  'v3': 'Design',
-                  'v4': 'Personality',
-                  'v5': 'Voice',
-                },
-              );
-            },
-          ),
+        return ListView.builder(
+          shrinkWrap: true,
+          itemCount: banners.length,
+          itemBuilder: (context, index) {
+            var banner = banners[index];
+            return BannerCard(
+              bannerId: banner.id,
+              name: banner['name'],
+              imageUrl: banner['url'],
+              va: banner['va'],
+              checkboxValues: {
+                'v1': banner['v1'] ?? false,
+                'v2': banner['v2'] ?? false,
+                'v3': banner['v3'] ?? false,
+                'v4': banner['v4'] ?? false,
+                'v5': banner['v5'] ?? false,
+              },
+              displayTexts: {
+                'v1': 'Cute AF',
+                'v2': 'Small Size',
+                'v3': 'Design',
+                'v4': 'Personality',
+                'v5': 'Voice',
+              },
+            );
+          },
         );
       },
     );
