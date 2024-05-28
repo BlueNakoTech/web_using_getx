@@ -1,4 +1,8 @@
+import 'dart:async';
+
+import 'package:app_using_getx/app/modules/hsr/controllers/hsr_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class CardMobile extends StatelessWidget {
   const CardMobile({
@@ -161,5 +165,158 @@ class UniversalButton extends StatelessWidget {
           onPressed: _onPressed,
           child: Text(_buttonText)),
     );
+  }
+}
+
+class BannerCard extends StatelessWidget {
+  final String name;
+  final String bannerId;
+  final String imageUrl;
+  final String va;
+  final Map<String, bool> checkboxValues;
+  final Map<String, String> displayTexts;
+
+  const BannerCard({
+    super.key,
+    required this.name,
+    required this.va,
+    required this.imageUrl,
+    required this.bannerId,
+    required this.checkboxValues,
+    required this.displayTexts,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final HsrController controller = Get.find();
+
+    String pullStrategy = controller.determinePullStrategy(checkboxValues, va);
+
+    return Card(
+      color: Colors.transparent.withOpacity(0.5),
+      margin: const EdgeInsets.all(10),
+      elevation: 5,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              name,
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(2.0),
+            child: Text(
+              "JP VA : $va",
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 12,
+              ),
+            ),
+          ),
+          Row(
+            children: [
+              Expanded(
+                flex: 2,
+                child: SizedBox(
+                  child: Image.network(
+                    imageUrl,
+                    fit: BoxFit.contain,
+                  ),
+                ),
+              ),
+              Expanded(
+                flex: 1,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: checkboxValues.keys.map((key) {
+                    return Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Text(
+                          displayTexts[key]!,
+                          style: const TextStyle(color: Colors.white),
+                        ),
+                        Theme(
+                          data: ThemeData(
+                            unselectedWidgetColor: Colors
+                                .white, // Color of the checkbox when it is not selected
+                          ),
+                          child: Checkbox(
+                            value: checkboxValues[key],
+                            onChanged: (bool? value) {
+                              if (value != null) {
+                                controller.updateCheckboxValue(
+                                    bannerId, key, value);
+                              }
+                            },
+                            activeColor: Colors.grey, // Color of the checkbox
+                            checkColor: Colors.yellowAccent,
+                            // Color of the check mark
+                          ),
+                        ),
+                      ],
+                    );
+                  }).toList(),
+                ),
+              ),
+            ],
+          ),
+          PullStrategyBox(pullStrategy: pullStrategy)
+        ],
+      ),
+    );
+  }
+}
+
+class PullStrategyBox extends StatelessWidget {
+  final String pullStrategy;
+
+  const PullStrategyBox({Key? key, required this.pullStrategy})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    Color backgroundColor = _getBackgroundColor(pullStrategy);
+
+    return Container(
+      width: double.infinity,
+      height: 50,
+      decoration: BoxDecoration(
+        color: backgroundColor,
+        border: Border.all(color: Colors.black),
+      ),
+      child: Center(
+        child: Text(
+          pullStrategy,
+          style: TextStyle(color: Colors.white),
+        ),
+      ),
+    );
+  }
+
+  Color _getBackgroundColor(String pullStrategy) {
+    switch (pullStrategy) {
+      case 'Skip':
+        return Colors.grey;
+
+      case 'Maybe':
+        return Colors.yellow;
+      case 'Pull':
+        return Colors.blue;
+      case 'All In':
+        return Colors.green;
+      case 'Special VA Override : Pull at Any Cost':
+        return Colors.redAccent; // Special case color
+      default:
+        return Colors.transparent;
+    }
   }
 }
