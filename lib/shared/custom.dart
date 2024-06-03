@@ -168,10 +168,10 @@ class UniversalButton extends StatelessWidget {
   }
 }
 
-class BannerCard extends StatelessWidget {
+class BannerCard extends StatefulWidget {
   final String name;
   final String bannerId;
-  final String imageUrl;
+  final String imageUrl; // This is the path in Firebase Storage
   final String va;
   final Map<String, bool> checkboxValues;
   final Map<String, String> displayTexts;
@@ -187,17 +187,32 @@ class BannerCard extends StatelessWidget {
   });
 
   @override
+  State<BannerCard> createState() => _BannerCardState();
+}
+
+class _BannerCardState extends State<BannerCard> {
+  late Future<String> _imageUrlFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    final HsrController controller = Get.find();
+    _imageUrlFuture = controller.fetchImageUrl(widget.imageUrl);
+  }
+
+  @override
   Widget build(BuildContext context) {
     final HsrController controller = Get.find();
 
-    String pullStrategy = controller.determinePullStrategy(checkboxValues, va);
+    String pullStrategy =
+        controller.determinePullStrategy(widget.checkboxValues, widget.va);
 
     return Card(
       color: Colors.transparent.withOpacity(0.5),
       margin: const EdgeInsets.all(10),
       elevation: 5,
       child: Container(
-        padding: EdgeInsets.all(10),
+        padding: const EdgeInsets.all(10),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
@@ -205,7 +220,7 @@ class BannerCard extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Text(
-                name,
+                widget.name,
                 style: const TextStyle(
                   color: Colors.white,
                   fontSize: 20,
@@ -216,7 +231,7 @@ class BannerCard extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.all(2.0),
               child: Text(
-                "JP VA : $va",
+                "JP VA : ${widget.va}",
                 style: const TextStyle(
                   color: Colors.white,
                   fontSize: 12,
@@ -227,39 +242,82 @@ class BannerCard extends StatelessWidget {
               children: [
                 Expanded(
                   flex: 2,
-                  child: SizedBox(
-                    child: Image.network(
-                      imageUrl,
-                      fit: BoxFit.contain,
-                    ),
+                  child: FutureBuilder<String>(
+                    future: _imageUrlFuture,
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const Center(child: CircularProgressIndicator());
+                      } else if (snapshot.hasError) {
+                        return const Icon(
+                          Icons.error,
+                          color: Colors.red,
+                        );
+                      } else if (!snapshot.hasData) {
+                        return const Icon(
+                          Icons.error,
+                          color: Colors.red,
+                        );
+                      } else {
+                        print(snapshot.data);
+                        return Image.network(
+                          snapshot.data!,
+                          fit: BoxFit.contain,
+                          loadingBuilder: (BuildContext context, Widget child,
+                              ImageChunkEvent? loadingProgress) {
+                            if (loadingProgress == null) {
+                              return child;
+                            } else {
+                              return Center(
+                                child: CircularProgressIndicator(
+                                  value: loadingProgress.expectedTotalBytes !=
+                                          null
+                                      ? loadingProgress.cumulativeBytesLoaded /
+                                          (loadingProgress.expectedTotalBytes ??
+                                              1)
+                                      : null,
+                                ),
+                              );
+                            }
+                          },
+                          errorBuilder: (BuildContext context, Object error,
+                              StackTrace? stackTrace) {
+                            return const Icon(
+                              Icons.error,
+                              color: Colors.red,
+                            );
+                          },
+                        );
+                      }
+                    },
                   ),
                 ),
                 Expanded(
                   flex: 1,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: checkboxValues.keys.map((key) {
+                    children: widget.checkboxValues.keys.map((key) {
                       return Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           Text(
-                            displayTexts[key]!,
+                            widget.displayTexts[key]!,
                             style: const TextStyle(color: Colors.white),
                           ),
                           Theme(
                             data: ThemeData(
-                              unselectedWidgetColor: Colors
-                                  .white, // Color of the checkbox when it is not selected
+                              unselectedWidgetColor: Colors.white,
+                              // Color of the checkbox when it is not selected
                             ),
                             child: Checkbox(
-                              value: checkboxValues[key],
+                              value: widget.checkboxValues[key],
                               onChanged: (bool? value) {
                                 if (value != null) {
                                   controller.updateCheckboxValue(
-                                      bannerId, key, value);
+                                      widget.bannerId, key, value);
                                 }
                               },
-                              activeColor: Colors.grey, // Color of the checkbox
+                              activeColor: Colors.grey,
+                              // Color of the checkbox
                               checkColor: Colors.yellowAccent,
                               // Color of the check mark
                             ),
@@ -271,7 +329,7 @@ class BannerCard extends StatelessWidget {
                 ),
               ],
             ),
-            PullStrategyBox(pullStrategy: pullStrategy)
+            PullStrategyBox(pullStrategy: pullStrategy),
           ],
         ),
       ),
@@ -287,8 +345,9 @@ class PullStrategyBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Color backgroundColor = _getBackgroundColor(pullStrategy);
-
+    final controller = Get.put(HsrController());
+    Color backgroundColor =
+        _getBackgroundColor(pullStrategy, controller.voiceActressNames);
     return Container(
       width: double.infinity,
       height: 50,
@@ -305,20 +364,25 @@ class PullStrategyBox extends StatelessWidget {
     );
   }
 
-  Color _getBackgroundColor(String pullStrategy) {
+  Color _getBackgroundColor(
+      String pullStrategy, List<String> voiceActressNames) {
     switch (pullStrategy) {
       case 'Skip':
         return Colors.grey;
-
       case 'Maybe':
         return Colors.yellow;
       case 'Pull':
         return Colors.blue;
       case 'All In':
         return Colors.green;
-      case 'Special VA Override : Pull at Any Cost':
-        return Colors.redAccent; // Special case color
       default:
+        // Check if it's a special case for voice actress names
+        for (var name in voiceActressNames) {
+          if (pullStrategy.startsWith('Special Case : $name')) {
+            return Colors.redAccent;
+          }
+        }
+        // Default color for unknown cases
         return Colors.transparent;
     }
   }

@@ -8,6 +8,7 @@ abstract class Routes {
   static const HOME = _Paths.HOME;
   static const WARTHUNDERJOIN = _Paths.WARTHUNDERJOIN;
   static const HSR = _Paths.HSR;
+  static const TEST = _Paths.TEST;
 }
 
 abstract class _Paths {
@@ -15,4 +16,5 @@ abstract class _Paths {
   static const HOME = '/home';
   static const WARTHUNDERJOIN = '/warthunderjoin';
   static const HSR = '/hsr';
+  static const TEST = '/test';
 }

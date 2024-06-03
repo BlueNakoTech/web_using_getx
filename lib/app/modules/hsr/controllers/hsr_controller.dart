@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get/get.dart';
 
 class HsrController extends GetxController {
@@ -6,10 +7,13 @@ class HsrController extends GetxController {
 
   // Observable list to store banners
   var banner = <DocumentSnapshot>[].obs;
+  // var voiceActressNames = <String>[].obs;
   final List<String> voiceActressNames = [
     'Tomori Kusunoki',
     'Ayana Taketatsu',
     'Konomi Kohara',
+    'Hayami Saori',
+    'Touyama Nao'
 
     // Add more names as needed
   ];
@@ -17,7 +21,25 @@ class HsrController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+
+    // fetchVoiceActressNames();
     fetchBanners();
+  }
+
+  Future<String> fetchImageUrl(String path) async {
+    final List<String> extensions = ['jpg', 'webp', 'png'];
+    for (var ext in extensions) {
+      try {
+        final ref = FirebaseStorage.instance
+            .ref()
+            .child('hsr-banner')
+            .child('$path.$ext');
+        return await ref.getDownloadURL();
+      } catch (e) {
+        // Continue to the next extension if the current one fails
+      }
+    }
+    throw Exception('No valid image found for path: $path');
   }
 
   String determinePullStrategy(
@@ -26,7 +48,7 @@ class HsrController extends GetxController {
     bool hasSpecialName = voiceActressNames.contains(bannerVa);
 
     if (hasSpecialName) {
-      return 'Special VA Override : Pull at Any Cost'; // Special case for voice actress names
+      return 'Special Case : $bannerVa'; // Special case for voice actress names
     }
 
     if (selectedCount == 0) {

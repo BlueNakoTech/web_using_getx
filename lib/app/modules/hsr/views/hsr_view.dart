@@ -13,7 +13,7 @@ class HsrView extends GetView<HsrController> {
       appBar: AppBar(
         leading: Image.asset("assets/images/Honkai_Star_Rail.webp"),
         backgroundColor: Colors.black45,
-        title: Text("Character Gacha"),
+        title: Text("Character Banner Preferences"),
       ),
       body: Stack(children: [
         const BackgroundImageWidget(),
@@ -22,7 +22,9 @@ class HsrView extends GetView<HsrController> {
             height: double.infinity,
             alignment: Alignment.center,
             child: SizedBox(
-                width: 800, height: double.infinity, child: BannerListWidget()))
+                width: 1600,
+                height: double.infinity,
+                child: BannerListWidget()))
       ]),
     );
   }
@@ -52,6 +54,11 @@ class BannerListWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isFullWidth = screenWidth >= 1200; // Change this threshold as needed
+
+    final crossAxisCount = isFullWidth ? 2 : 1;
+
     return StreamBuilder(
       stream: FirebaseFirestore.instance.collection('banner').snapshots(),
       builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -63,15 +70,20 @@ class BannerListWidget extends StatelessWidget {
         }
 
         var banners = snapshot.data!.docs;
-        return ListView.builder(
-          shrinkWrap: true,
+        return GridView.builder(
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: crossAxisCount, // Number of columns
+            crossAxisSpacing: 10, // Spacing between columns
+            mainAxisSpacing: 10, // Spacing between rows
+            childAspectRatio: 1.5, // Aspect ratio of each item
+          ),
           itemCount: banners.length,
           itemBuilder: (context, index) {
             var banner = banners[index];
             return BannerCard(
               bannerId: banner.id,
               name: banner['name'],
-              imageUrl: banner['url'],
+              imageUrl: banner['name'],
               va: banner['va'],
               checkboxValues: {
                 'v1': banner['v1'] ?? false,
@@ -80,9 +92,9 @@ class BannerListWidget extends StatelessWidget {
                 'v4': banner['v4'] ?? false,
                 'v5': banner['v5'] ?? false,
               },
-              displayTexts: {
-                'v1': 'Cute AF',
-                'v2': 'Small Size',
+              displayTexts: const {
+                'v1': 'Imut Banget',
+                'v2': 'Kecil',
                 'v3': 'Design',
                 'v4': 'Personality',
                 'v5': 'Voice',
