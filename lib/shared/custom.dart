@@ -378,7 +378,7 @@ class PullStrategyBox extends StatelessWidget {
       default:
         // Check if it's a special case for voice actress names
         for (var name in voiceActressNames) {
-          if (pullStrategy.startsWith('Special Case : $name')) {
+          if (pullStrategy.startsWith('Special Case All In: $name')) {
             return Colors.redAccent;
           }
         }

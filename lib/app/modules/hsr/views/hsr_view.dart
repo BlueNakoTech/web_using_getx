@@ -1,3 +1,4 @@
+import 'package:app_using_getx/app/modules/hsr/views/addbanner_view.dart';
 import 'package:app_using_getx/shared/custom.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -11,9 +12,34 @@ class HsrView extends GetView<HsrController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: Image.asset("assets/images/Honkai_Star_Rail.webp"),
+        leading: IconButton(
+          iconSize: 40,
+          onPressed: (() {
+            Get.to(() => const AddbannerView());
+          }),
+          hoverColor: Colors.white30,
+          icon: const Icon(
+            Icons.add,
+            size: 40,
+            color: Colors.white24,
+          ),
+        ),
         backgroundColor: Colors.black45,
-        title: Text("Character Banner Preferences"),
+        title: Row(
+          children: [
+            Flexible(
+              flex: 1,
+              child: Image.asset(
+                "assets/images/Honkai_Star_Rail.webp",
+                fit: BoxFit.contain,
+              ),
+            ),
+            const Flexible(
+              flex: 2,
+              child: Text("Character Banner Preferences"),
+            ),
+          ],
+        ),
       ),
       body: Stack(children: [
         const BackgroundImageWidget(),
@@ -60,7 +86,10 @@ class BannerListWidget extends StatelessWidget {
     final crossAxisCount = isFullWidth ? 2 : 1;
 
     return StreamBuilder(
-      stream: FirebaseFirestore.instance.collection('banner').snapshots(),
+      stream: FirebaseFirestore.instance
+          .collection('banner')
+          .orderBy('addedDate', descending: true) // Sort by addedDate
+          .snapshots(),
       builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CircularProgressIndicator());
