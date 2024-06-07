@@ -122,11 +122,11 @@ class BannerListWidget extends StatelessWidget {
                 'v5': banner['v5'] ?? false,
               },
               displayTexts: const {
-                'v1': 'Imut Banget',
+                'v1': 'Imut',
                 'v2': 'Kecil',
-                'v3': 'Design',
-                'v4': 'Personality',
-                'v5': 'Voice',
+                'v3': 'Cantik',
+                'v4': 'Suara',
+                'v5': 'Imut Banget',
               },
             );
           },

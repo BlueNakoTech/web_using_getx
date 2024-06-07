@@ -153,7 +153,7 @@ class HsrController extends GetxController {
     bool hasSpecialName = voiceActressNames.contains(bannerVa);
 
     if (hasSpecialName) {
-      return 'Special Case All In: $bannerVa'; // Special case for voice actress names
+      return 'Special Case All In'; // Special case for voice actress names
     }
 
     if (selectedCount == 0) {

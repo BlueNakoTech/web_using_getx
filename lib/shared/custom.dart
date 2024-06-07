@@ -190,14 +190,27 @@ class BannerCard extends StatefulWidget {
   State<BannerCard> createState() => _BannerCardState();
 }
 
-class _BannerCardState extends State<BannerCard> {
+class _BannerCardState extends State<BannerCard>
+    with SingleTickerProviderStateMixin {
   late Future<String> _imageUrlFuture;
+  late AnimationController _blinkController;
 
   @override
   void initState() {
     super.initState();
     final HsrController controller = Get.find();
     _imageUrlFuture = controller.fetchImageUrl(widget.imageUrl);
+
+    _blinkController = AnimationController(
+      duration: const Duration(milliseconds: 500),
+      vsync: this,
+    )..repeat(reverse: true);
+  }
+
+  @override
+  void dispose() {
+    _blinkController.dispose();
+    super.dispose();
   }
 
   @override
@@ -206,6 +219,7 @@ class _BannerCardState extends State<BannerCard> {
 
     String pullStrategy =
         controller.determinePullStrategy(widget.checkboxValues, widget.va);
+    bool isSpecialCase = pullStrategy.startsWith('Special Case All In');
 
     return Card(
       color: Colors.transparent.withOpacity(0.5),
@@ -230,12 +244,35 @@ class _BannerCardState extends State<BannerCard> {
             ),
             Padding(
               padding: const EdgeInsets.all(2.0),
-              child: Text(
-                "JP VA : ${widget.va}",
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 12,
-                ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text(
+                    "JP VA : ",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 12,
+                    ),
+                  ),
+                  AnimatedBuilder(
+                    animation: _blinkController,
+                    builder: (context, child) {
+                      return Text(
+                        widget.va,
+                        style: TextStyle(
+                            color: isSpecialCase
+                                ? (_blinkController.value < 0.5
+                                    ? Colors.red
+                                    : Colors.transparent)
+                                : Colors.white,
+                            fontSize: 12,
+                            fontWeight: isSpecialCase
+                                ? FontWeight.bold
+                                : FontWeight.normal),
+                      );
+                    },
+                  ),
+                ],
               ),
             ),
             Row(
@@ -258,7 +295,6 @@ class _BannerCardState extends State<BannerCard> {
                           color: Colors.red,
                         );
                       } else {
-                        print(snapshot.data);
                         return Image.network(
                           snapshot.data!,
                           fit: BoxFit.contain,
@@ -291,40 +327,80 @@ class _BannerCardState extends State<BannerCard> {
                     },
                   ),
                 ),
-                Expanded(
+                Flexible(
                   flex: 1,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: widget.checkboxValues.keys.map((key) {
-                      return Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          Text(
-                            widget.displayTexts[key]!,
-                            style: const TextStyle(color: Colors.white),
-                          ),
-                          Theme(
-                            data: ThemeData(
-                              unselectedWidgetColor: Colors.white,
-                              // Color of the checkbox when it is not selected
+                  child: Stack(
+                    children: [
+                      Column(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: widget.checkboxValues.keys.map((key) {
+                          return Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              Flexible(
+                                child: Text(
+                                  widget.displayTexts[key]!,
+                                  style: const TextStyle(color: Colors.white),
+                                ),
+                              ),
+                              Theme(
+                                data: ThemeData(
+                                  unselectedWidgetColor: Colors.white,
+                                  // Color of the checkbox when it is not selected
+                                ),
+                                child: Checkbox(
+                                  value: widget.checkboxValues[key],
+                                  onChanged: (bool? value) {
+                                    if (value != null) {
+                                      controller.updateCheckboxValue(
+                                          widget.bannerId, key, value);
+                                    }
+                                  },
+                                  activeColor: Colors.grey,
+                                  // Color of the checkbox
+                                  checkColor: Colors.yellowAccent,
+                                  // Color of the check mark
+                                ),
+                              ),
+                            ],
+                          );
+                        }).toList(),
+                      ),
+                      if (isSpecialCase)
+                        Positioned.fill(
+                          child: Container(
+                            color: Colors.black.withOpacity(0.5),
+                            child: Center(
+                              child: Transform.rotate(
+                                angle: 0.785398,
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    color:
+                                        Colors.transparent, // Transparent fill
+                                    border: Border.all(
+                                      color: Colors.red, // Red outline
+                                      width: 3, // Bold outline
+                                    ),
+                                  ),
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 4,
+                                    horizontal: 10,
+                                  ),
+                                  child: const Text(
+                                    'OVERRIDE',
+                                    style: TextStyle(
+                                      color: Colors.red,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                ),
+                              ),
                             ),
-                            child: Checkbox(
-                              value: widget.checkboxValues[key],
-                              onChanged: (bool? value) {
-                                if (value != null) {
-                                  controller.updateCheckboxValue(
-                                      widget.bannerId, key, value);
-                                }
-                              },
-                              activeColor: Colors.grey,
-                              // Color of the checkbox
-                              checkColor: Colors.yellowAccent,
-                              // Color of the check mark
-                            ),
                           ),
-                        ],
-                      );
-                    }).toList(),
+                        ),
+                    ],
                   ),
                 ),
               ],
@@ -358,7 +434,7 @@ class PullStrategyBox extends StatelessWidget {
       child: Center(
         child: Text(
           pullStrategy,
-          style: TextStyle(color: Colors.white),
+          style: const TextStyle(color: Colors.white),
         ),
       ),
     );
@@ -367,6 +443,8 @@ class PullStrategyBox extends StatelessWidget {
   Color _getBackgroundColor(
       String pullStrategy, List<String> voiceActressNames) {
     switch (pullStrategy) {
+      case 'Special Case All In':
+        return Colors.redAccent;
       case 'Skip':
         return Colors.grey;
       case 'Maybe':
@@ -376,13 +454,6 @@ class PullStrategyBox extends StatelessWidget {
       case 'All In':
         return Colors.green;
       default:
-        // Check if it's a special case for voice actress names
-        for (var name in voiceActressNames) {
-          if (pullStrategy.startsWith('Special Case All In: $name')) {
-            return Colors.redAccent;
-          }
-        }
-        // Default color for unknown cases
         return Colors.transparent;
     }
   }
