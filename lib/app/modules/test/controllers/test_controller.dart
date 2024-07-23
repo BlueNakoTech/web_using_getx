@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class TestController extends GetxController {
+  var operationToken = ''.obs;
   var result = ''.obs;
   var imageFile = Rx<Uint8List?>(null);
   final ApiService apiService = ApiService();
@@ -25,14 +26,6 @@ class TestController extends GetxController {
       result.value = 'Authenticated';
     } catch (e) {
       result.value = 'Authentication failed: $e';
-    }
-  }
-
-  Future<void> checkCorsStatus() async {
-    try {
-      await apiService.allowCors();
-    } catch (e) {
-      result.value = 'Error: $e';
     }
   }
 
@@ -60,17 +53,27 @@ class TestController extends GetxController {
     try {
       final data = await apiService.runSerialCommand(pin);
       result.value = data['result'];
-      imageFile.value = base64Decode(data['base64Image']);
     } catch (e) {
       result.value = 'Error: $e';
       imageFile.value = null;
     }
   }
 
-  Future<void> fetchData(String key) async {
+  Future<void> runMultiSerialCommand(String pin) async {
     try {
-      final data = await apiService.getData(key);
+      final data = await apiService.runMultiSerialCommand(pin);
+      operationToken.value = data['operationToken'];
+    } catch (e) {
+      result.value = 'Error: $e';
+    }
+  }
+
+  Future<void> fetchData(String key) async {
+    var operationToken = key;
+    try {
+      final data = await apiService.getData(operationToken);
       result.value = data['result'];
+
       imageFile.value = base64Decode(data['base64Image']);
     } catch (e) {
       result.value = 'Error: $e';

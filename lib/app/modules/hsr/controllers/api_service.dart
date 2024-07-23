@@ -22,20 +22,15 @@ class ApiService {
   static const String baseUrl =
       'https://careful-mouse-gradually.ngrok-free.app';
   String? _authToken;
+  String? _opToken;
   final http.Client httpClient = CorsHttpClient();
 
-  Future<void> allowCors() async {
-    final url = Uri.parse('$baseUrl/cors-options');
-    final response = await httpClient.send(http.Request('OPTIONS', url));
-    // Handle the response if necessary
-  }
-
   Future<void> authenticate(String clientId, String clientPin) async {
-    final url = Uri.parse('$baseUrl/api-client');
-
+    final url = Uri.parse('$baseUrl/authToken');
     final response = await httpClient.post(
       url,
       headers: {
+        'ngrok-skip-browser-warning': '60456',
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
         'Access-Control-Allow-Headers':
@@ -49,6 +44,7 @@ class ApiService {
     );
 
     if (response.statusCode == 200) {
+      print(json.decode(response.body));
       final data = json.decode(response.body);
       _authToken = data['accessToken'];
     } else {
@@ -61,9 +57,11 @@ class ApiService {
       throw Exception('Not authenticated');
     }
 
-    final url = Uri.parse('$baseUrl/status');
+    final url = Uri.parse('$baseUrl/ui-status');
     final response = await http.get(url, headers: {
       'Authorization': 'Bearer $_authToken',
+      'ngrok-skip-browser-warning': '60943',
+      'clientId': "client02"
     });
 
     if (response.statusCode == 200) {
@@ -91,16 +89,45 @@ class ApiService {
   }
 
   Future<Map<String, dynamic>> runSerialCommand(String pin) async {
-    if (_authToken == null) {
-      throw Exception('Not authenticated');
-    }
-
-    final url = Uri.parse('$baseUrl/run/serial/$pin');
-    final response = await http.post(url, headers: {
-      'Authorization': 'Bearer $_authToken',
-    });
+    final url = Uri.parse('$baseUrl/send-command');
+    final response = await http.post(
+      url,
+      headers: {
+        'Authorization': 'Bearer $_authToken',
+        'Content-Type': 'application/json',
+        'ngrok-skip-browser-warning': '60943',
+        'clientId': "client02"
+      },
+      body: json.encode({
+        'command': pin,
+      }),
+    );
 
     if (response.statusCode == 200) {
+      return json.decode(response.body);
+    } else {
+      throw Exception('Failed to run serial command');
+    }
+  }
+
+  Future<Map<String, dynamic>> runMultiSerialCommand(String pin) async {
+    final url = Uri.parse('$baseUrl/send-multi-commands');
+    final response = await http.post(
+      url,
+      headers: {
+        'Authorization': 'Bearer $_authToken',
+        'Content-Type': 'application/json',
+        'ngrok-skip-browser-warning': '60943',
+        'clientId': "client02"
+      },
+      body: json.encode({
+        'characters': pin,
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+      _opToken = data['operationToken'];
       return json.decode(response.body);
     } else {
       throw Exception('Failed to run serial command');
@@ -112,9 +139,12 @@ class ApiService {
       throw Exception('Not authenticated');
     }
 
-    final url = Uri.parse('$baseUrl/get/$key');
+    final url = Uri.parse('$baseUrl/result/$key');
     final response = await http.get(url, headers: {
       'Authorization': 'Bearer $_authToken',
+      'Content-Type': 'application/json',
+      'ngrok-skip-browser-warning': '60943',
+      'clientId': "client02"
     });
 
     if (response.statusCode == 200) {
